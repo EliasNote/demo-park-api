@@ -1,6 +1,7 @@
 package com.mballen.demoparkapi.web.exception;
 
 import com.mballen.demoparkapi.exception.EntityNotFoundException;
+import com.mballen.demoparkapi.exception.PasswordInvalidException;
 import com.mballen.demoparkapi.exception.UsernameUniqueViolationException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +17,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
+    @ExceptionHandler(PasswordInvalidException.class)
+    public ResponseEntity<ErrorMessage> methodArgumentNotValidException(PasswordInvalidException ex,
+                                                                        HttpServletRequest request) {
+        log.error("Api Error - ", ex);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, ex.getMessage()));
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorMessage> methodArgumentNotValidException(EntityNotFoundException ex,
+    public ResponseEntity<ErrorMessage> entityNotFoundException(EntityNotFoundException ex,
                                                                         HttpServletRequest request) {
         log.error("Api Error - ", ex);
         return ResponseEntity
@@ -25,6 +36,7 @@ public class ApiExceptionHandler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, ex.getMessage()));
     }
+
 
     @ExceptionHandler(UsernameUniqueViolationException.class)
     public ResponseEntity<ErrorMessage> uniqueViolationException(UsernameUniqueViolationException ex,
