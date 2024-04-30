@@ -1,5 +1,6 @@
 package com.mballen.demoparkapi.web.exception;
 
+import com.mballen.demoparkapi.exception.CpfUniqueViolationException;
 import com.mballen.demoparkapi.exception.EntityNotFoundException;
 import com.mballen.demoparkapi.exception.PasswordInvalidException;
 import com.mballen.demoparkapi.exception.UsernameUniqueViolationException;
@@ -29,7 +30,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(PasswordInvalidException.class)
-    public ResponseEntity<ErrorMessage> methodArgumentNotValidException(PasswordInvalidException ex,
+    public ResponseEntity<ErrorMessage> methodArgumentNotValidException(RuntimeException ex,
                                                                         HttpServletRequest request) {
         log.error("Api Error - ", ex);
         return ResponseEntity
@@ -39,7 +40,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorMessage> entityNotFoundException(EntityNotFoundException ex,
+    public ResponseEntity<ErrorMessage> entityNotFoundException(RuntimeException ex,
                                                                         HttpServletRequest request) {
         log.error("Api Error - ", ex);
         return ResponseEntity
@@ -49,8 +50,8 @@ public class ApiExceptionHandler {
     }
 
 
-    @ExceptionHandler(UsernameUniqueViolationException.class)
-    public ResponseEntity<ErrorMessage> uniqueViolationException(UsernameUniqueViolationException ex,
+    @ExceptionHandler({UsernameUniqueViolationException.class, CpfUniqueViolationException.class})
+    public ResponseEntity<ErrorMessage> uniqueViolationException(RuntimeException ex,
                                                                         HttpServletRequest request) {
         log.error("Api Error - ", ex);
         return ResponseEntity
@@ -58,6 +59,7 @@ public class ApiExceptionHandler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.CONFLICT, ex.getMessage()));
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> methodArgumentNotValidException(MethodArgumentNotValidException ex,
                                                                         HttpServletRequest request,

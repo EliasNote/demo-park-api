@@ -4,6 +4,7 @@ import com.mballen.demoparkapi.web.dto.UsuarioCreateDto;
 import com.mballen.demoparkapi.web.dto.UsuarioResponseDto;
 import com.mballen.demoparkapi.web.dto.UsuarioSenhaDto;
 import com.mballen.demoparkapi.web.exception.ErrorMessage;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
